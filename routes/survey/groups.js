@@ -21,7 +21,7 @@ router.get('/userGroups', authenticateToken,async (req,res)=>{
 router.get('/userAdminGroups', authenticateToken,async (req,res)=>{
   try{
     const groups = await Group.find({_id:{$in: req.user.adminAccessGroup.map((obj)=>new mongoose.Types.ObjectId(obj.entityId))}});
-    console.log(groups);
+    // console.log(groups);
     res.status(200).json({groups, token: req.user_token_, success: true});
   }catch(err){
     console.error(err);
@@ -66,14 +66,14 @@ router.get('/:groupId/questions', authenticateToken, validateGroupAccess, async 
 
 // POST a new group
 router.post('/', authenticateToken, validateAdmin, async (req, res) => {
-  console.log(req.body);
+  // console.log(req.body);
   const group = new Group({
     name: req.body.name,
     location: req.body.location,
     creator: req.user.username
   });
 
-  console.log(group);
+  // console.log(group);
 
   group.validUsers.push(req.user.username);
   group.adminAccessUsers.push(req.user.username);
@@ -81,17 +81,17 @@ router.post('/', authenticateToken, validateAdmin, async (req, res) => {
   try {
     const newGroup = await group.save();
     const user = await User.findOne({username: req.user.username});
-    console.log(user);
+    // console.log(user);
     user.groupId.push(newGroup._id);
     user.adminAccessGroup.push({entityId: newGroup._id, level: 0});
     await user.save();
 
     const {name, groupId, location} = group;
     let _token = req.user._token_;
-    console.log(req.user);
+    // console.log(req.user);
     await notifyPermissionsChanged([req.user.username],req.user);
-    console.log(req.user);
-    console.log(req.user._token_ === _token);
+    // console.log(req.user);
+    // console.log(req.user._token_ === _token);
     res.status(201).json({message:"group successfully created", success:true, token: req.user._token_});
   } catch (err) {
     res.status(400).json({ message: err.message, success: false });
@@ -152,11 +152,11 @@ router.put('/:groupId/removeQuestions', authenticateToken, validateGroupAdminAcc
         return res.status(404).json({ message: 'Cannot find group', success: false });
     }
 
-    console.log(existingGroup.questionPaperId);
+    // console.log(existingGroup.questionPaperId);
     // console.log(req.body.includes(new mongoose.Types.ObjectId(existingGroup.questionPaperId[1])));
     existingGroup.questionPaperId = existingGroup.questionPaperId.filter((ele)=> !req.body.includes(ele.toString()));
-    console.log(req.body);
-    console.log(existingGroup.questionPaperId);
+    // console.log(req.body);
+    // console.log(existingGroup.questionPaperId);
 
     const validUsers = existingGroup.validUsers;
 

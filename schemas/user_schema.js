@@ -58,9 +58,9 @@ userSchema.pre('save', function (next) {
     if (err) {
       return next(err);
     }
-    console.log("salt printed")
-    console.log(salt);
-    console.log(this);
+    // console.log("salt printed")
+    // console.log(salt);
+    // console.log(this);
     bcrypt.hash(this.password, salt, (err, hash) => {
       if (err) {
         return next(err);

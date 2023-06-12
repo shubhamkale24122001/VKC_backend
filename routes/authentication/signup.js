@@ -4,8 +4,8 @@ const User = require('../../schemas/user_schema');
 
 
 router.post('/', async (req, res, next) => {
-    console.log("signup run");
-    console.log(req.body);
+    // console.log("signup run");
+    // console.log(req.body);
     const { firstname, lastname, username, password, isAdmin } = req.body;
     try {
         const existingUser = await User.findOne({ username });

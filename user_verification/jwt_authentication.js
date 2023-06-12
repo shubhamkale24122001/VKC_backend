@@ -30,10 +30,10 @@ function authenticateToken(req, res, next) {
     }
 
     req.user = user;
-    console.log("from authenticateToken");
-    console.log(new Date(user.exp*1000))
+    // console.log("from authenticateToken");
+    // console.log(new Date(user.exp*1000))
 
-    console.log(user);
+    // console.log(user);
     next();
   });
 }
@@ -41,8 +41,8 @@ function authenticateToken(req, res, next) {
 async function expireUserToken(user){
   const userCred = jwt.decode(user._token_);
   const exp_time = new Date(userCred.exp*1000) // multiplied by 1000 as js needs epoch in milliseconds
-  console.log("from generateUpdatedToken");
-  console.log(userCred);
+  // console.log("from generateUpdatedToken");
+  // console.log(userCred);
   
   if(!expiredTokens.populationComplete) await populateExpiredTokens();
   addTokenToExpire(user._token_,exp_time, user.username);

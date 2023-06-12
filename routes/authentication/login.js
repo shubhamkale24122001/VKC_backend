@@ -21,7 +21,7 @@ router.post('/', async (req, res, next) => {
       
       const token = generateToken(user);
       const { firstname, lastname } = user;
-      console.log({ success: true ,token, username, firstname, lastname })
+      // console.log({ success: true ,token, username, firstname, lastname })
       return res.json({ success: true ,token, username, firstname, lastname });
     });
   } catch (err) {

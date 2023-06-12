@@ -11,16 +11,16 @@ const mongoose = require('mongoose');
 async function deleteAnswers(questionPaper){
   const {_id} = questionPaper;
   const res = await AnswerSheet.deleteMany({questionPaperId: new mongoose.Types.ObjectId(_id)});
-  console.log(res);
+  // console.log(res);
 }
 async function deleteUserQuestionsAndGroupQuestions(questionPaper){
     const {_id, validUsers, groupId} = questionPaper;
-    console.log(_id);
-    console.log(validUsers);
+    // console.log(_id);
+    // console.log(validUsers);
     const res = await User.updateMany({username: {$in: validUsers}},
                 {$pull:{questionPaperId: new mongoose.Types.ObjectId(_id), adminAccessQuestionPaper:{entityId: new mongoose.Types.ObjectId(_id)}}},
                 {multi: true});
-    console.log(res);
+    // console.log(res);
 
     const res1 = await Group.updateMany({_id:{$in: groupId.map((ids)=>new mongoose.Types.ObjectId(ids))}}, {$pull:{questionPaperId: new mongoose.Types.ObjectId(_id)}});    
 }
@@ -68,11 +68,11 @@ router.post('/', authenticateToken, validateAdmin, async (req, res) => {
     // Add the new question paper's id to the user's questionPaperId list
     const username = req.user.username;
     const user = await User.findOne({username: username});
-    console.log(user);
+    // console.log(user);
     user.questionPaperId.push(savedQuestionPaper._id);
     user.adminAccessQuestionPaper.push({entityId: savedQuestionPaper._id, level: 0});
     const val = await user.save();
-    console.log(val);
+    // console.log(val);
     
     await notifyPermissionsChanged([req.user.username],req.user);
     res.status(201).json({message:"questionPaper successfully created",success: true, token: req.user._token_});
@@ -114,7 +114,7 @@ router.put('/modify/:questionPaperId', authenticateToken, validateQuestionAdminA
       questionPaper.questions = questions || questionPaper.questions;
   
       const updatedQuestionPaper = await questionPaper.save();
-      console.log(updatedQuestionPaper);
+      // console.log(updatedQuestionPaper);
       if(requestResubmit){
         deleteAnswers(updatedQuestionPaper);
       }
@@ -129,7 +129,7 @@ router.put('/modify/:questionPaperId', authenticateToken, validateQuestionAdminA
   router.delete('/delete/:questionPaperId', authenticateToken, validateQuestionCreator,async (req, res) => {
     try {
         const questionPaper = await QuestionPaper.findById(req.params.questionPaperId);
-        console.log(questionPaper);
+        // console.log(questionPaper);
     
         if (!questionPaper) {
             return res.status(404).json({

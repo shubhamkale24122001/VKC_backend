@@ -1,13 +1,13 @@
 function validateAdmin(req, res, next){
-    console.log("validateAdmin reached");
+    // console.log("validateAdmin reached");
     if(!req.user.isAdmin) return res.status(403).json({ message: 'Forbidden' });
     next();
 }
 
 function validateQuestionAccess(req, res, next){
     const _id = req.params.questionPaperId
-    console.log(_id);
-    console.log("validateQuestionAccess reached");
+    // console.log(_id);
+    // console.log("validateQuestionAccess reached");
     if(!req.user.questionPaperId.find((id)=>id===_id)) return res.status(403).json({ message: 'Forbidden' });
     next();
 }
@@ -15,7 +15,7 @@ function validateQuestionAccess(req, res, next){
 
 function validateQuestionAdminAccess(req, res, next){
     const _id = req.params.questionPaperId
-    console.log("validateQuestionAdminAccess reached");
+    // console.log("validateQuestionAdminAccess reached");
     let found=  req.user.adminAccessQuestionPaper.find((accessObj)=>{
         return accessObj["entityId"] === _id
     });
@@ -25,7 +25,7 @@ function validateQuestionAdminAccess(req, res, next){
 
 function validateQuestionCreator(req, res, next){
     const _id = req.params.questionPaperId
-    console.log("validateQuestionCreator reached");
+    // console.log("validateQuestionCreator reached");
     let found=  req.user.adminAccessQuestionPaper.find((accessObj)=>{
         return accessObj["entityId"] === _id && accessObj["level"] === 0;
     });
